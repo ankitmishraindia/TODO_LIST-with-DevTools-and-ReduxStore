@@ -1,24 +1,33 @@
-import logo from './logo.svg';
+import {useReducer, useState} from 'react';
 import './App.css';
+import TodoList from './components/TodoList/TodoList';
+import TodoContext from './context/TodoContext';
+import todoReducer from './reducer/todoReducer';
+import TodoDispatchContext from './context/TodoDispatchContext';
+
 
 function App() {
+//   const [list,setList]=useState([
+//     {id:1,Name:'todo1',isFinished:false},
+//     {id:2,Name:'todo2',isFinished:false}
+// ])
+
+  const [list,dispatch]=useReducer(todoReducer,[])
+  const[addText,setAddText]=useState('')
+  console.log(list)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+   <TodoContext.Provider value={{list}}>
+    <TodoDispatchContext.Provider value={{dispatch}}>
+    <div>
+      <input type='text' value={addText} onChange={(e)=>setAddText(e.target.value)}/>
+      <button onClick={()=>{
+        dispatch({type:'add_todo',payload:{todoText:addText}})
+      }
+      }>Add</button>
     </div>
+   <TodoList/>
+ </TodoDispatchContext.Provider>
+</TodoContext.Provider>
   );
 }
 
