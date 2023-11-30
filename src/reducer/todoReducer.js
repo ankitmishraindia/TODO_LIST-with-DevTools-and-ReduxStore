@@ -1,4 +1,4 @@
-function todoReducer(state,action){
+function todoReducer(state=[],action){
     if(action.type=='add_todo'){
         let todoText=action.payload.todoText;
         return [
@@ -16,8 +16,8 @@ function todoReducer(state,action){
          })
          return updatedList;
     }else if(action.type=='delete_todo'){
-        let todo=action.payload.todo;
-        const updatedList=state.filter((t)=>t.id!==todo.id)
+        let todoId=action.payload.todoId;
+        const updatedList=state.filter((t)=>t.id!=todoId)
         return updatedList;
     }
     else if(action.type=='change_finish'){
@@ -32,6 +32,7 @@ function todoReducer(state,action){
          })
          return updatedList;
     }
+    return state;
 }
 
 export default todoReducer;

@@ -1,33 +1,33 @@
-import {useReducer, useState} from 'react';
+import { useState} from 'react';
 import './App.css';
 import TodoList from './components/TodoList/TodoList';
-import TodoContext from './context/TodoContext';
-import todoReducer from './reducer/todoReducer';
-import TodoDispatchContext from './context/TodoDispatchContext';
+import {useDispatch} from 'react-redux'
+import { bindActionCreators } from 'redux';
+import { addTodo,editTodo,deleteTodo,todoFinish } from './slices/todoSlices';
+
+
 
 
 function App() {
-//   const [list,setList]=useState([
-//     {id:1,Name:'todo1',isFinished:false},
-//     {id:2,Name:'todo2',isFinished:false}
-// ])
 
-  const [list,dispatch]=useReducer(todoReducer,[])
+  const dispatch=useDispatch()
+  //bind actions
+  const actions=bindActionCreators({addTodo,editTodo,deleteTodo,todoFinish},dispatch)
   const[addText,setAddText]=useState('')
-  console.log(list)
+  
   return (
-   <TodoContext.Provider value={{list}}>
-    <TodoDispatchContext.Provider value={{dispatch}}>
+  
+  <>
     <div>
       <input type='text' value={addText} onChange={(e)=>setAddText(e.target.value)}/>
       <button onClick={()=>{
-        dispatch({type:'add_todo',payload:{todoText:addText}})
+        actions.addTodo({todoText:addText})
       }
       }>Add</button>
     </div>
-   <TodoList/>
- </TodoDispatchContext.Provider>
-</TodoContext.Provider>
+    <TodoList DEL_TODO={actions.deleteTodo} FINISH_TODO={actions.todoFinish} EDIT_TODO={actions.editTodo}/>
+   </>
+
   );
 }
 
